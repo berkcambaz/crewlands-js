@@ -119,7 +119,7 @@ function send(data) {
   data = JSON.stringify(data);
 
   for (let i = 0; i < server.clients.length; ++i)
-    server.clients[i].write(data);
+    server.clients[i].write(data + "\n");
 }
 
 /**
@@ -129,7 +129,7 @@ function send(data) {
  */
 function sendTo(data, toId) {
   data = JSON.stringify(data);
-  server.clients[toId].write(data);
+  server.clients[toId].write(data + "\n");
 }
 
 /**
@@ -142,7 +142,7 @@ function sendExcept(data, exceptId) {
 
   for (let i = 0; i < server.clients.length; ++i) {
     if (i !== exceptId)
-      server.clients[i].write(data);
+      server.clients[i].write(data + "\n");
   }
 }
 
@@ -153,7 +153,7 @@ function sendExcept(data, exceptId) {
 function sendToServer(data) {
   if (client.connected) {
     data = JSON.stringify(data);
-    client.socket.write(data)
+    client.socket.write(data + "\n")
   }
 }
 // --- SEND FUNCTIONS --- //

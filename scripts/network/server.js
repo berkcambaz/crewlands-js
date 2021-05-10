@@ -1,6 +1,7 @@
 import { client } from "./client.js";
 import { chat } from "../ui/chat.js";
 import { packet } from "./packets/packet.js";
+import { DataHandler } from "./data-handler.js";
 const net = require("net");
 
 export const server = {
@@ -9,7 +10,9 @@ export const server = {
   /** @type {net.Server} */
   socket: null,
   /** @type {net.Socket[]} */
-  clients: []
+  clients: [],
+  /** @type {DataHandler[]} */
+  dataHandlers: []
 }
 
 function start() {
@@ -24,18 +27,25 @@ function start() {
 
     server.socket.on("connection", (socket) => {
       const id = server.clients.push(socket) - 1;
+      server.dataHandlers.push(new DataHandler("\n"));
       packet.playerConnected(true, id);
 
       socket.on("data", (data) => {
         const clientId = server.clients.indexOf(socket);
-        data = JSON.parse(data);
-        data.clientId = clientId;
-        packet.handles[data.id](false, data)
+        server.dataHandlers[clientId].push(data);
+
+        data = server.dataHandlers[clientId].getData()
+        if (data) {
+          console.log(data);
+          data.clientId = clientId;
+          packet.handles[data.id](false, data)
+        }
       })
 
       socket.on("close", () => {
         const clientId = server.clients.indexOf(socket);
         server.clients.splice(clientId, 1)[0].destroy();
+        server.dataHandlers.splice(clientId, 1);
         packet.playerDisconnected(true);
       })
     })
@@ -55,6 +65,7 @@ function stop() {
     server.socket.close((err) => {
       server.socket = null;
       server.clients = []
+      server.dataHandlers = []
       if (err)
         console.log(err);
     })

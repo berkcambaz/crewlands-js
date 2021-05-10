@@ -15,14 +15,13 @@ function init() {
       chatInput.value = "";
       insertMessage(message)
 
-      // Send the message to the server
-      packet.sendMessage(true, null, { message: message });
-
       // Scroll to bottom
       chatMessageContainer.scrollTop = chatMessageContainer.scrollHeight;
 
       if (message.startsWith("/"))
         parseCommand(message.substr(1));
+      else    // If not a command, send it to the server
+        packet.sendMessage(true, null, { message: message });
     }
   })
 }
