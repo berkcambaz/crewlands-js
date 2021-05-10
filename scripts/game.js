@@ -51,9 +51,11 @@ function draw() {
   for (let i = 0; i < tilemap.tiles.length; ++i) {
     if (tilemap.tiles[i].x + camera.x + tilemap.tileWidth > -1 && tilemap.tiles[i].x + camera.x < canvas.width + 1
       && tilemap.tiles[i].y + camera.y + tilemap.tileHeight > -1 && tilemap.tiles[i].y + camera.y < canvas.height + 1) {
-      ctx.drawImage(tilemap.tiles[i].l1, tilemap.tiles[i].x + camera.x, tilemap.tiles[i].y + camera.y)
-      ctx.drawImage(tilemap.tiles[i].l2, tilemap.tiles[i].x + camera.x, tilemap.tiles[i].y + camera.y)
-      ctx.drawImage(tilemap.tiles[i].l3, tilemap.tiles[i].x + camera.x, tilemap.tiles[i].y + camera.y)
+      const posX = tilemap.tiles[i].x + camera.x;
+      const posY = tilemap.tiles[i].y + camera.y;
+      if (tilemap.tiles[i].l1) ctx.drawImage(tilemap.tiles[i].l1, posX, posY)
+      if (tilemap.tiles[i].l2) ctx.drawImage(tilemap.tiles[i].l2, posX, posY)
+      if (tilemap.tiles[i].l3) ctx.drawImage(tilemap.tiles[i].l3, posX, posY)
     }
   }
 

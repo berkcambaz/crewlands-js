@@ -1,6 +1,6 @@
 export const world = {
-  /** @type {Object.<number, Country>} */
-  countries: {}
+  /** @type {Country[]} */
+  countries: []
 }
 
 /**

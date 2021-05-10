@@ -1,9 +1,6 @@
 import { SPRITE, sprites } from "./sprite.js";
 import { world } from "./world.js";
 import { tilemap } from "./tilemap.js";
-import { random } from "./random.js";
-import { server } from "./network/server.js";
-import { client } from "./network/client.js";
 const fs = require("fs");
 
 export const COUNTRY = {
@@ -34,7 +31,6 @@ export const util = {
   load: load,
   getSave: getSave,
   setSave: setSave,
-  generateMap: generateMap,
   isServer: isServer
 }
 
@@ -179,41 +175,6 @@ function setSave(save) {
       armyId: save.tiles[i].armyId
     })
   }
-}
-
-/**
- * 
- * @param {number} width 
- * @param {number} height 
- * @param {number} countryCount 
- */
-function generateMap(width, height, countryCount) {
-  const tiles = []
-
-  for (let y = 0; y < width; ++y) {
-    for (let x = 0; x < height; ++x) {
-      let countryId = random(COUNTRY.GREEN, COUNTRY.YELLOW)
-      let occupiedByCountryId = COUNTRY.NONE
-      let landmarkId = random(LANDMARK.CAPITAL, LANDMARK.TOWER)
-      let armyId = random(COUNTRY.GREEN, COUNTRY.YELLOW)
-
-      tiles.push({
-        x: x * 128,
-        y: y * 128,
-        l1: util.countryIdToSprite(countryId, occupiedByCountryId),
-        l2: util.landmarkIdToSprite(landmarkId),
-        l3: util.countryIdToArmySprite(armyId),
-        countryId: countryId,
-        occupiedByCountryId: occupiedByCountryId,
-        landmarkId: landmarkId,
-        armyId: armyId
-      });
-    }
-  }
-
-  tilemap.width = width;
-  tilemap.height = height;
-  tilemap.tiles = tiles;
 }
 
 function isServer(clientId) {

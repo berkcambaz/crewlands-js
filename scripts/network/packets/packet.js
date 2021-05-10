@@ -2,6 +2,7 @@ import { server } from "../server.js";
 import { client } from "../client.js";
 import { chat } from "../../ui/chat.js";
 import { util } from "../../util.js";
+import { mapGenerator } from "../../map-generator.js";
 
 let packetId = 0;
 
@@ -84,7 +85,7 @@ function generateMap(sending, receiveData, sendData) {
   } else {
     // If the host and the generate map requester is the same
     if (util.isServer(receiveData.clientId)) {
-      util.generateMap(receiveData.width, receiveData.height, receiveData.countryCount)
+      mapGenerator.generate(receiveData.width, receiveData.height, receiveData.countryCount)
 
       for (let i = 1; i < server.clients.length; ++i)
         syncPlayer(true, null, i);
