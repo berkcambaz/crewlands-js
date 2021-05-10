@@ -1,0 +1,178 @@
+@font-face {
+  font-family: quicksand;
+  src: url("./quicksand.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+html {
+  background-color: #000000;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+
+  font-family: quicksand;
+
+  overflow: hidden;
+}
+
+canvas {
+  width: 100%;
+  max-width: 1920px;
+  display: block;
+
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimize-contrast;
+  -ms-interpolation-mode: nearest-neighbor;
+}
+
+.chat {
+  position: absolute;
+  width: 256px;
+  height: 400px;
+  bottom: 0;
+  left: 0;
+  
+  background-color: #cccccc;
+}
+
+.chat_message_container {
+  position: absolute;
+  width: 246px;
+  height: 365px;
+  bottom: 25px;
+  left: 0;
+  
+  padding: 5px;
+
+  overflow-y: scroll;
+  
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.chat_input {
+  position: absolute;
+  left: 0;
+  width: 246px;
+  bottom: 0;
+
+  border: 0;
+  padding: 5px;
+  outline: 0;
+
+  font-size: 14px;
+  font-family: quicksand;
+  font-weight: bold;
+}
+
+.panel-top {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  
+  padding: 10px;
+
+  background-color: #cccccc;
+  border-radius: 0 0 5px 0;
+
+  font-size: 18px;
+}
+
+.panel-top-text {
+  width: 12ch;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.panel-bottom {
+  position: absolute;
+  width: 768px;
+  height: 192px;
+  bottom: 0;
+  left: calc(50% - 384px);
+
+  background-color: #cccccc;
+  border-radius: 5px 5px 0 0;
+}
+
+.panel-bottom-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  width: 28px;
+  height: 28px;
+
+  background-image: url("../sprites/grey_button_close.png");
+  background-size: 28px 28px;
+
+  cursor: pointer;
+}
+
+.province {
+  margin: 10px;
+
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.province-info {
+  margin: 0 10px;
+
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.province-image_container {
+  height: 98px;
+  
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.province-image {
+  width: 80px;
+  height: 80px;
+  margin: 0 10px;
+
+  border: 2px solid #000000;
+  border-radius: 15px;
+
+  cursor: pointer;
+
+  background-image: url("../sprites/house.png");
+  background-repeat: no-repeat;
+  background-size: 80px 80px;
+
+  image-rendering: crisp-edges;
+  image-rendering: -moz-crisp-edges;         
+  image-rendering: -o-crisp-edges;            
+  image-rendering: -webkit-optimize-contrast; 
+  -ms-interpolation-mode: nearest-neighbor;   
+}
+
+
+/* --- UTILITY --- */
+.hide { display: none; }
+
+.image-demolish { background-image: url('../sprites/demolish.png'); }
+.image-church { background-image: url('../sprites/church.png'); }
+.image-house { background-image: url('../sprites/house.png'); }
+.image-tower { background-image: url('../sprites/tower.png'); }
+.image-army_green_big { background-image: url('../sprites/army_green_big.png'); }
+.image-army_purple_big { background-image: url('../sprites/army_purple_big.png'); }
+.image-army_red_big { background-image: url('../sprites/army_red_big.png'); }
+.image-army_yellow_big { background-image: url('../sprites/army_yellow_big.png'); }
+/* --- UTILITY --- */

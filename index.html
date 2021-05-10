@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./styles/main.css">
+</head>
+
+<body>
+  <div>
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <div id="chat" class="chat">
+    <div id="chat_message_container" class="chat_message_container">
+    </div>
+    <input class="chat_input" id="chat_input" type="text" placeholder="Type something...">
+  </div>
+
+  <div id="panel-top" class="panel-top">
+    <span id="country_name" style="font-weight: bold;">RED</span>
+    <div id="gold" class="panel-top-text">Gold: 10</div>
+    <div id="income" class="panel-top-text">Income: 999900009</div>
+    <div id="army" class="panel-top-text">Army: 3/4</div>
+  </div>
+
+  <div id="panel-bottom" class="panel-bottom hide">
+    <div id="panel-bottom-close" class="panel-bottom-close image-close"></div>
+    <div id="province_name" class="province">Purple's Province (Occupied by Purple)</div>
+    <div id="province_landmark" class="province-info">- No Landmark</div>
+    <div id="province_army" class="province-info">- No Army</div>
+    <div class="province-image_container">
+      <div id="army_green" class="province-image image-army_green_big "></div>
+      <div id="army_purple" class="province-image image-army_purple_big "></div>
+      <div id="army_red" class="province-image image-army_red_big "></div>
+      <div id="army_yellow" class="province-image image-army_yellow_big hide"></div>
+      <div id="action_demolish" class="province-image image-demolish "></div>
+      <div id="action_build_church" class="province-image image-church hide"></div>
+      <div id="action_build_house" class="province-image image-house hide"></div>
+      <div id="action_build_tower" class="province-image image-tower hide"></div>
+    </div>
+  </div>
+
+  <script src="./scripts/game.js" type="module"></script>
+</body>
+
+</html>
