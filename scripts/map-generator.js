@@ -29,8 +29,8 @@ function generate(width, height, countryCount) {
   }
 
   // Initialize an empty map
-  for (let y = 0; y < width; ++y) {
-    for (let x = 0; x < height; ++x) {
+  for (let y = 0; y < height; ++y) {
+    for (let x = 0; x < width; ++x) {
       tiles.push({
         x: x * 128,
         y: y * 128,
