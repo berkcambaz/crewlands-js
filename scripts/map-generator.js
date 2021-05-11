@@ -13,7 +13,9 @@ export const mapGenerator = {
  * @param {number} countryCount 
  */
 function generate(width, height, countryCount) {
+  /** @type {import("./tilemap.js").Tile} */
   const tiles = []
+  /** @type {import("./world.js").Country} */
   const countries = [];
   const provinces = [];
 

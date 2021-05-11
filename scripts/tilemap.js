@@ -3,7 +3,7 @@ export const tilemap = {
   tileHeight: 128,
   width: 10,
   height: 10,
-  /** @type {{x: number, y: number, l1: HTMLImageElement, l2: HTMLImageElement, l3: HTMLImageElement, countryId: number, }[]} */
+  /** @type {Tile[]} */
   tiles: [],
   getTile: getTile,
   getTileAt: getTileAt,

@@ -1,7 +1,7 @@
 import { server } from "../network/server.js";
 import { client } from "../network/client.js";
-import { tilemap } from "../tilemap.js";
 import { packet } from "../network/packets/packet.js";
+import { util } from "../util.js";
 
 export const chat = {
   init: init,
@@ -62,6 +62,15 @@ function parseCommand(command) {
     case "choosecountry":
       commandChooseCountry(command[1]);
       break;
+    case "save":
+      commandSave(command[1]);
+      break;
+    case "load":
+      commandLoad(command[1]);
+      break;
+    case "getsaves":
+      commandGetSaves();
+      break;
     case "help":
       commandHelp();
       break;
@@ -91,15 +100,6 @@ function commandGenerateMap(width, height, countryCount) {
   packet.generateMap(true, null, { width: width, height: height, countryCount: countryCount })
 }
 
-function commandHelp() {
-  insertMessage(`Commands:
-    /host 
-    /join {ip} {port}
-    /stop
-    /leave
-    /genmap {width} {height} {countryCount}`);
-}
-
 function commandChooseCountry(countryName) {
   switch (countryName) {
     case "green":
@@ -111,6 +111,34 @@ function commandChooseCountry(countryName) {
     case "yellow":
       break;
   }
+}
+
+function commandSave(name) {
+  console.log(util.save(name));
+}
+
+function commandLoad(name) {
+  console.log(util.load(name));
+}
+
+function commandGetSaves() {
+  const saves = util.getAllSaves();
+  if (saves.length === 0)
+    chat.insertMessage("No save found.");
+  else
+    chat.insertMessage(saves.join(", "))
+}
+
+function commandHelp() {
+  insertMessage(`Commands:
+    /host 
+    /join {ip} {port}
+    /stop
+    /leave
+    /genmap {width} {height} {countryCount}
+    /save {name}
+    /load {name}
+    /getsaves`);
 }
 
 const messageLimit = 50;
