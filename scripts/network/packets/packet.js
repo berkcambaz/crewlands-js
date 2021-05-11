@@ -21,7 +21,7 @@ export const packet = {
     generateMap,
     sendMessage,
     broadcastMessage,
-    chooseCountry,
+    //chooseCountry,
   ],
   playerConnected: playerConnected,
   playerDisconnected: playerDisconnected,
@@ -29,7 +29,7 @@ export const packet = {
   generateMap: generateMap,
   sendMessage: sendMessage,
   broadcastMessage: broadcastMessage,
-  chooseCountry: chooseCountry
+  //chooseCountry: chooseCountry
 }
 
 /**
@@ -42,7 +42,7 @@ function playerConnected(sending, exceptId) {
     const data = { id: packet.PLAYER_CONNECTED }
     sendExcept(data, exceptId)
   } else {
-    chat.insertMessage("A player has joined.");
+    chat.insertMessage("A player has joined.", false);
   }
 }
 
@@ -55,7 +55,7 @@ function playerDisconnected(sending) {
     const data = { id: packet.PLAYER_DISCONNECTED }
     send(data)
   } else {
-    chat.insertMessage("A player has left.");
+    chat.insertMessage("A player has left.", false);
   }
 }
 
@@ -110,7 +110,7 @@ function broadcastMessage(sending, receiveData, sendData) {
     sendData.id = packet.BROADCAST_MESSAGE;
     sendExcept(sendData, sendData.clientId)
   } else {
-    chat.insertMessage(receiveData.message);
+    chat.insertMessage(receiveData.message, false);
   }
 }
 

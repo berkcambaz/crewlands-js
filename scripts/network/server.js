@@ -21,7 +21,7 @@ function start() {
 
     server.socket.listen(0, "127.0.0.1", () => {
       const port = server.socket.address().port;
-      chat.insertMessage(`Server has started on port ${port}.`);
+      chat.insertMessage(`Server has started on port ${port}.`, true);
       client.connect("127.0.0.1", port);
     })
 
@@ -59,7 +59,7 @@ function start() {
 
 function stop() {
   if (server.socket && server.socket.listening) {
-    chat.insertMessage(`Server has stopped.`);
+    chat.insertMessage(`Server has stopped.`, true);
 
     server.clients.forEach((client) => { client.destroy() })
     server.socket.close((err) => {

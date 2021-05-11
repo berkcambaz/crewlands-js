@@ -13,10 +13,8 @@ function init() {
     if (ev.key === "Enter") {
       const message = chatInput.value;
       chatInput.value = "";
-      insertMessage(message)
+      insertMessage(message, true)
 
-      // Scroll to bottom
-      chatMessageContainer.scrollTop = chatMessageContainer.scrollHeight;
 
       if (message.startsWith("/"))
         parseCommand(message.substr(1));
@@ -26,10 +24,13 @@ function init() {
   })
 }
 
-function insertMessage(message) {
+function insertMessage(message, scrollToBottom) {
   const messageElem = document.createElement("div");
   messageElem.innerText = message;
   chatMessageContainer.appendChild(messageElem);
+
+  if (scrollToBottom)
+    chatMessageContainer.scrollTop = chatMessageContainer.scrollHeight;
 
   messages.push(messageElem);
   if (messages.length > messageLimit)
@@ -75,7 +76,7 @@ function parseCommand(command) {
       commandHelp();
       break;
     default:
-      insertMessage("Command not found");
+      insertMessage("Command not found", true);
       break;
   }
 }
@@ -134,9 +135,9 @@ function commandLoad(name) {
 function commandGetSaves() {
   const saves = util.getAllSaves();
   if (saves.length === 0)
-    chat.insertMessage("No save found.");
+    chat.insertMessage("No save found.", true);
   else
-    chat.insertMessage(saves.join(", "))
+    chat.insertMessage(saves.join(", "), true)
 }
 
 function commandHelp() {
@@ -149,7 +150,7 @@ function commandHelp() {
     /color {colorName}
     /save {name}
     /load {name}
-    /getsaves`);
+    /getsaves`, true);
 }
 
 const messageLimit = 50;

@@ -19,7 +19,7 @@ function connect(ip, port) {
     client.socket = new net.Socket();
 
     client.socket.connect(port, ip, () => {
-      chat.insertMessage(`Connected to the server.`);
+      chat.insertMessage(`Connected to the server.`, true);
       client.dataHandler = new DataHandler("\n");
       client.connected = true;
     })
@@ -48,6 +48,6 @@ function disconnect() {
     client.socket = null;
     client.dataHandler = null;
     client.connected = true;
-    chat.insertMessage(`Disconnected from the server.`);
+    chat.insertMessage(`Disconnected from the server.`, true);
   }
 }
