@@ -1,5 +1,4 @@
 import { SPRITE, sprites } from "./sprite.js";
-import { world } from "./world.js";
 import { tilemap } from "./tilemap.js";
 const fs = require("fs");
 
@@ -31,7 +30,8 @@ export const util = {
   load: load,
   getSave: getSave,
   setSave: setSave,
-  isServer: isServer
+  isServer: isServer,
+  clamp: clamp
 }
 
 function countryIdToSprite(countryId, occupiedByCountryId) {
@@ -105,7 +105,7 @@ function countryIdToColor(id) {
     case COUNTRY.YELLOW:
       return "#ffb600";
     default:
-      return null;
+      return "#000000";
   }
 }
 
@@ -146,7 +146,7 @@ function getAllSaves() {
 
 function getSave() {
   const save = {
-    countries: world.countries,
+    countries: tilemap.countries,
     width: tilemap.width,
     height: tilemap.height,
     tiles: []
@@ -165,7 +165,7 @@ function getSave() {
 }
 
 function setSave(save) {
-  world.countries = save.countries;
+  tilemap.countries = save.countries;
   tilemap.width = save.width;
   tilemap.height = save.height;
   tilemap.tiles = []
@@ -187,4 +187,18 @@ function setSave(save) {
 
 function isServer(clientId) {
   return 0 === clientId;
+}
+
+/**
+ * 
+ * @param {number} num Number to be clamped.
+ * @param {number} min Minimum number, inclusive.
+ * @param {number} max Maximum number, inclusive.
+ * @returns 
+ */
+function clamp(num, min, max) {
+  if (num > max) return max;
+  else if (num < min) return min;
+
+  return num;
 }

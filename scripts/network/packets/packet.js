@@ -13,20 +13,23 @@ export const packet = {
   GENERATE_MAP: packetId++,
   SEND_MESSAGE: packetId++,
   BROADCAST_MESSAGE: packetId++,
+  CHOOSE_COUNTRY: packetId++,
   handles: [
     playerConnected,
     playerDisconnected,
     syncPlayer,
     generateMap,
     sendMessage,
-    broadcastMessage
+    broadcastMessage,
+    chooseCountry,
   ],
   playerConnected: playerConnected,
   playerDisconnected: playerDisconnected,
   syncPlayer: syncPlayer,
   generateMap: generateMap,
   sendMessage: sendMessage,
-  broadcastMessage: broadcastMessage
+  broadcastMessage: broadcastMessage,
+  chooseCountry: chooseCountry
 }
 
 /**

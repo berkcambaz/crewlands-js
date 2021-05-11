@@ -13,21 +13,28 @@ export const mapGenerator = {
  * @param {number} countryCount 
  */
 function generate(width, height, countryCount) {
-  /** @type {import("./tilemap.js").Tile} */
+  /** @type {import("./tilemap.js").Tile[]} */
   const tiles = []
-  /** @type {import("./world.js").Country} */
+  /** @type {import("./tilemap.js").Country[]} */
   const countries = [];
   const provinces = [];
+  const evaluationPoints = [];
 
   // Necessary for map generation
   const countryWidth = Math.floor(width / countryCount)
   const countryHeight = Math.floor(height / countryCount)
   const capitalDistance = countryWidth * countryWidth + countryHeight * countryHeight
 
-  // Initialize countries & provinces
+  // Initialize countries, provinces & evaluation points
   for (let i = 0; i < countryCount; ++i) {
-    countries.push({});
+    evaluationPoints.push(Math.floor(width * height / 2));
     provinces.push([]);
+    countries.push({
+      army: 0,
+      armyLimit: 1,
+      gold: 0,
+      income: 1
+    });
   }
 
   // Initialize an empty map
@@ -47,11 +54,11 @@ function generate(width, height, countryCount) {
     }
   }
 
-  const capitals = chooseOrigins(width, height, countryCount, capitalDistance);
+  const origins = chooseOrigins(width, height, countryCount, capitalDistance);
   for (let i = 0; i < countryCount; ++i) {
-    const tileIndex = capitals[i].x + capitals[i].y * width;
+    const tileIndex = origins[i].x + origins[i].y * width;
 
-    provinces[i].push({ x: capitals[i].x, y: capitals[i].y });
+    provinces[i].push({ x: origins[i].x, y: origins[i].y });
 
     tiles[tileIndex].countryId = i;
     tiles[tileIndex].l1 = util.countryIdToSprite(i);
@@ -59,26 +66,32 @@ function generate(width, height, countryCount) {
 
   chooseProvinces(tiles, provinces, width, height)
   sprinkleNature(tiles);
+  evaluateCountries(tiles, evaluationPoints);
+
+  // Set the evaluation points as the gold of the countries
+  for (let i = 0; i < countries.length; ++i)
+    countries[i].gold = util.clamp(evaluationPoints[i], width * height / 4, width * height / 2);
 
   console.log(tiles);
-  console.log(provinces);
-  console.log(capitals);
+  console.log(origins);
+  console.log(countries);
 
   tilemap.width = width;
   tilemap.height = height;
   tilemap.tiles = tiles;
+  tilemap.countries = countries;
 }
 
 function chooseOrigins(width, height, countryCount, capitalDistance) {
-  const capitals = [];
+  const origins = [];
 
   // Select origin for each country
   for (let i = 0; i < countryCount; ++i) {
-    capitals.push({ x: random.number(0, width - 1), y: random.number(0, height - 1) })
+    origins.push({ x: random.number(0, width - 1), y: random.number(0, height - 1) })
     if (i > 0) {
-      for (let j = 0; j < capitals.length - 1; ++j) {
-        const diffX = Math.abs(capitals[j].x - capitals[i].x)
-        const diffY = Math.abs(capitals[j].y - capitals[i].y)
+      for (let j = 0; j < origins.length - 1; ++j) {
+        const diffX = Math.abs(origins[j].x - origins[i].x)
+        const diffY = Math.abs(origins[j].y - origins[i].y)
         const length = diffX * diffX + diffY * diffY;
         if (length < capitalDistance)
           return chooseOrigins(width, height, countryCount, capitalDistance)
@@ -86,7 +99,7 @@ function chooseOrigins(width, height, countryCount, capitalDistance) {
     }
   }
 
-  return capitals;
+  return origins;
 }
 
 function chooseProvinces(tiles, provinces, width, height) {
@@ -139,5 +152,27 @@ function sprinkleNature(tiles) {
       { percent: 70, result: LANDMARK.NONE },
     ]);
     tiles[i].l2 = util.landmarkIdToSprite(tiles[i].landmarkId);
+  }
+}
+
+function evaluateCountries(tiles, evaluationPoints) {
+  for (let i = 0; i < tiles.length; ++i) {
+    const landmarkId = tiles[i].landmarkId;
+    const countryId = tiles[i].countryId;
+
+    switch (landmarkId) {
+      case LANDMARK.FOREST:
+        evaluationPoints[countryId] -= 1;
+        break;
+      case LANDMARK.MOUNTAINS:
+        evaluationPoints[countryId] -= 1;
+        break;
+      case LANDMARK.NONE:
+        evaluationPoints[countryId] -= 0;
+        break;
+    }
+
+    // Subtract 1 evaluation point for each province
+    evaluationPoints[countryId] -= 1;
   }
 }

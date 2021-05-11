@@ -1,11 +1,14 @@
 import { COUNTRY, util } from "../util.js";
 
 export const panelTop = {
-  init: init,
   update: update
 }
 
-function init(countryId) {
+/**
+ * 
+ * @param {import("../tilemap").Country} country 
+ */
+function update(countryId, country) {
   switch (countryId) {
     case COUNTRY.GREEN:
       countryName.textContent = "GREEN";
@@ -19,16 +22,12 @@ function init(countryId) {
     case COUNTRY.YELLOW:
       countryName.textContent = "YELLOW";
       break;
+    case COUNTRY.NONE:
+      countryName.textContent = "NONE";
+      break;
   }
-
   countryName.style.color = util.countryIdToColor(countryId);
-}
 
-/**
- * 
- * @param {import("../world").Country} country 
- */
-function update(country) {
   const goldText = "Gold: " + country.gold
   gold.textContent = goldText;
   gold.title = goldText;

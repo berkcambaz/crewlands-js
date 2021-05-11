@@ -5,6 +5,8 @@ export const tilemap = {
   height: 10,
   /** @type {Tile[]} */
   tiles: [],
+  /** @type {Country[]} */
+  countries: [],
   getTile: getTile,
   getTileAt: getTileAt,
   getTilePos: getTilePos
@@ -23,6 +25,13 @@ export const tilemap = {
  * @property {number} armyId
  */
 
+/**
+ * @typedef Country
+ * @property {number} gold
+ * @property {number} income
+ * @property {number} army
+ * @property {number} armyLimit
+ */
 
 /**
  * 

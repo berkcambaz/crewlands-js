@@ -1,7 +1,7 @@
 import { server } from "../network/server.js";
 import { client } from "../network/client.js";
 import { packet } from "../network/packets/packet.js";
-import { util } from "../util.js";
+import { COUNTRY, util } from "../util.js";
 
 export const chat = {
   init: init,
@@ -59,8 +59,8 @@ function parseCommand(command) {
     case "genmap":
       commandGenerateMap(command[1], command[2], command[3]);
       break;
-    case "choosecountry":
-      commandChooseCountry(command[1]);
+    case "color":
+      commandColor(command[1]);
       break;
     case "save":
       commandSave(command[1]);
@@ -100,17 +100,27 @@ function commandGenerateMap(width, height, countryCount) {
   packet.generateMap(true, null, { width: width, height: height, countryCount: countryCount })
 }
 
-function commandChooseCountry(countryName) {
-  switch (countryName) {
+function commandColor(color) {
+  let countryId;
+  switch (color) {
     case "green":
+      countryId = COUNTRY.GREEN;
       break;
     case "purple":
+      countryId = COUNTRY.PURPLE;
       break;
     case "red":
+      countryId = COUNTRY.RED;
       break;
     case "yellow":
+      countryId = COUNTRY.YELLOW;
+      break;
+    case "none":
+      countryId = COUNTRY.NONE;
       break;
   }
+
+  packet.chooseCountry(countryId);
 }
 
 function commandSave(name) {
@@ -131,11 +141,12 @@ function commandGetSaves() {
 
 function commandHelp() {
   insertMessage(`Commands:
-    /host 
-    /join {ip} {port}
+    /host
     /stop
+    /join {ip} {port}
     /leave
-    /genmap {width} {height} {countryCount}
+    /genmap {width} {height} {colorCount}
+    /color {colorName}
     /save {name}
     /load {name}
     /getsaves`);
