@@ -56,6 +56,8 @@ function countryIdToSprite(countryId, occupiedByCountryId) {
     case COUNTRY.YELLOW:
       return sprites[SPRITE.TILE_YELLOW];
   }
+
+  return null;
 }
 
 function landmarkIdToSprite(id) {
@@ -72,6 +74,8 @@ function landmarkIdToSprite(id) {
       return sprites[SPRITE.MOUNTAINS];
     case LANDMARK.TOWER:
       return sprites[SPRITE.TOWER];
+    default:
+      return null;
   }
 }
 
@@ -85,6 +89,8 @@ function countryIdToArmySprite(id) {
       return sprites[SPRITE.ARMY_RED];
     case COUNTRY.YELLOW:
       return sprites[SPRITE.ARMY_YELLOW];
+    default:
+      return null;
   }
 }
 
@@ -98,6 +104,8 @@ function countryIdToColor(id) {
       return "#fc5c65";
     case COUNTRY.YELLOW:
       return "#ffb600";
+    default:
+      return null;
   }
 }
 

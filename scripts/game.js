@@ -15,10 +15,10 @@ canvas.height = window.innerHeight;
 loadSprites(() => {
   //for (let y = 0; y < tilemap.height; ++y) {
   //  for (let x = 0; x < tilemap.width; ++x) {
-  //    let countryId = random(COUNTRY.GREEN, COUNTRY.YELLOW)
+  //    let countryId = random.number(COUNTRY.GREEN, COUNTRY.YELLOW)
   //    let occupiedByCountryId = COUNTRY.NONE
-  //    let landmarkId = random(LANDMARK.CAPITAL, LANDMARK.TOWER)
-  //    let armyId = random(COUNTRY.GREEN, COUNTRY.YELLOW)
+  //    let landmarkId = random.number(LANDMARK.CAPITAL, LANDMARK.TOWER)
+  //    let armyId = random.number(COUNTRY.GREEN, COUNTRY.YELLOW)
   //
   //    tilemap.tiles.push({
   //      x: x * 128,
