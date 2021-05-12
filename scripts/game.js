@@ -1,6 +1,7 @@
 import { SPRITE, sprites, loadSprites } from "./sprite.js";
 import { tilemap } from "./tilemap.js";
 import { ui } from "./ui/ui.js";
+import { util } from "./util.js";
 
 /** @type {HTMLCanvasElement} */
 const canvas = document.getElementById("canvas");
@@ -10,6 +11,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 loadSprites(() => {
+  util.load("mertmalaq")
   ui.panelBottom.init()
   ui.chat.init()
 
@@ -17,11 +19,14 @@ loadSprites(() => {
 });
 
 function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const canvasWidth = canvas.width / game.zoom
+  const canvasHeight = canvas.height / game.zoom
+
+  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
   for (let i = 0; i < tilemap.tiles.length; ++i) {
-    if (tilemap.tiles[i].x + camera.x + tilemap.tileWidth > -1 && tilemap.tiles[i].x + camera.x < canvas.width + 1
-      && tilemap.tiles[i].y + camera.y + tilemap.tileHeight > -1 && tilemap.tiles[i].y + camera.y < canvas.height + 1) {
+    if (tilemap.tiles[i].x + camera.x + tilemap.tileWidth > -1 && tilemap.tiles[i].x + camera.x < canvasWidth + 1
+      && tilemap.tiles[i].y + camera.y + tilemap.tileHeight > -1 && tilemap.tiles[i].y + camera.y < canvasHeight + 1) {
       const posX = tilemap.tiles[i].x + camera.x;
       const posY = tilemap.tiles[i].y + camera.y;
       if (tilemap.tiles[i].l1) ctx.drawImage(tilemap.tiles[i].l1, posX, posY)
@@ -54,15 +59,19 @@ function loop(timestamp) {
 /** @type {{x: number, y: number, tile: import("./tilemap.js").Tile}} */
 let selectedTile = null;
 let highlightedTile = { x: 0, y: 0 };
+
 let camera = { x: 0, y: 0 };
 let mouse = { x: 0, y: 0 };
+
+let transform = { e: 0, f: 0 };
+
 let moved = false;
 let pressed = false;
 
 canvas.addEventListener("mousemove", (ev) => {
   if (pressed) {
-    camera.x += ev.x - mouse.x;
-    camera.y += ev.y - mouse.y;
+    camera.x += (ev.x - mouse.x) / game.zoom;
+    camera.y += (ev.y - mouse.y) / game.zoom;
 
     moved = true;
   }
@@ -96,14 +105,33 @@ canvas.addEventListener("mouseup", (ev) => {
   moved = false;
 })
 
+canvas.addEventListener("wheel", (ev) => {
+  const dt = Math.sign(ev.wheelDelta) * 0.05;
+  game.zoom = util.clamp(game.zoom + dt, 0.5, 1.5);
+
+  ctx.setTransform(game.zoom, 0, 0, game.zoom, mouse.x, mouse.y)
+  const newTransform = ctx.getTransform();
+  ctx.translate(-mouse.x / game.zoom, -mouse.y / game.zoom)
+  console.log(game.zoom);
+  //camera.x += -transform.e + newTransform.e;
+  //camera.y += -transform.f + newTransform.f;
+  //
+  //transform = newTransform;
+  //highlightedTile = tilemap.getTilePos(mouse, camera);
+})
+
 window.addEventListener("resize", (ev) => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
+
+  // Set zoom level back because it's reset after resize event
+  ctx.setTransform(game.zoom, 0, 0, game.zoom, 0, 0)
 })
 
 export const game = {
   selectTile: selectTile,
-  unselectTile: unselectTile
+  unselectTile: unselectTile,
+  zoom: 1
 }
 
 function selectTile(tilePos, tile) {

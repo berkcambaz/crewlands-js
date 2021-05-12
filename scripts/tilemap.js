@@ -1,3 +1,5 @@
+import { game } from "./game.js";
+
 export const tilemap = {
   tileWidth: 128,
   tileHeight: 128,
@@ -66,7 +68,7 @@ function getTileAt(pos, camera) {
  */
 function getTilePos(mouse, camera) {
   return {
-    x: Math.floor((mouse.x - camera.x) / tilemap.tileWidth) * tilemap.tileWidth + camera.x,
-    y: Math.floor((mouse.y - camera.y) / tilemap.tileHeight) * tilemap.tileHeight + camera.y
+    x: Math.floor((mouse.x - (camera.x * game.zoom)) / (tilemap.tileWidth * game.zoom)) * (tilemap.tileWidth) + camera.x,
+    y: Math.floor((mouse.y - (camera.y * game.zoom)) / (tilemap.tileHeight * game.zoom)) * (tilemap.tileHeight) + camera.y
   };
 }
