@@ -10,8 +10,6 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-//ctx.setTransform(1, 0, 0, 1, canvas.width / 2, canvas.height / 2)
-
 loadSprites(() => {
   util.load("mertmalaq")
   ui.panelBottom.init()
@@ -21,14 +19,11 @@ loadSprites(() => {
 });
 
 function draw() {
-  const canvasWidth = canvas.width / game.zoom
-  const canvasHeight = canvas.height / game.zoom
-
-  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+  ctx.clearRect(0, 0, screen.w, screen.h);
 
   for (let i = 0; i < tilemap.tiles.length; ++i) {
-    if (tilemap.tiles[i].x + camera.x + tilemap.tileWidth > - 1 && tilemap.tiles[i].x + camera.x < canvasWidth + 1
-      && tilemap.tiles[i].y + camera.y + tilemap.tileHeight > - 1 && tilemap.tiles[i].y + camera.y < canvasHeight + 1) {
+    if (tilemap.tiles[i].x + camera.x + tilemap.tileWidth > - 1 && tilemap.tiles[i].x + camera.x < screen.w + 1
+      && tilemap.tiles[i].y + camera.y + tilemap.tileHeight > - 1 && tilemap.tiles[i].y + camera.y < screen.h + 1) {
       const posX = tilemap.tiles[i].x + camera.x;
       const posY = tilemap.tiles[i].y + camera.y;
       if (tilemap.tiles[i].l1) ctx.drawImage(tilemap.tiles[i].l1, posX, posY)
@@ -44,14 +39,14 @@ function draw() {
   }
 }
 
-//let time = 0;
-//let dt = 0;
-//let fps = 0;
+let time = 0;
+let dt = 0;
+let fps = 0;
 function loop(timestamp) {
-  //dt = (timestamp - time) / 1000;
-  //time = timestamp;
-  //fps = Math.round(1 / dt);
-  //console.log(fps);
+  dt = (timestamp - time) / 1000;
+  time = timestamp;
+  fps = Math.round(1 / dt);
+  console.log(fps);
 
   draw();
 
@@ -65,7 +60,9 @@ let highlightedTile = { x: 0, y: 0 };
 let camera = { x: 0, y: 0 };
 let mouse = { x: 0, y: 0 };
 
-let origin = { x: canvas.width / 2, y: canvas.height / 2 }
+let screen = { w: canvas.width, h: canvas.height }
+
+let zoomPoint = { x: canvas.width / 2, y: canvas.height / 2 }
 
 let moved = false;
 let pressed = false;
@@ -114,27 +111,20 @@ canvas.addEventListener("wheel", (ev) => {
   const dt = Math.sign(ev.wheelDelta) * 0.05;
   game.zoom = util.clamp(game.zoom + dt, 0.5, 1.25);
 
-  ctx.setTransform(game.zoom, 0, 0, game.zoom, 0, 0)
-
-  camera.x += -origin.x + canvas.width / (game.zoom * 2);
-  camera.y += -origin.y + canvas.height / (game.zoom * 2);
-  origin.x = canvas.width / (game.zoom * 2)
-  origin.y = canvas.height / (game.zoom * 2)
-
-  highlightedTile = tilemap.getTilePos(mouse, camera);
+  game.processZoom();
 })
 
 window.addEventListener("resize", (ev) => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  // Set zoom level back because it's reset after resize event
-  ctx.setTransform(game.zoom, 0, 0, game.zoom, 0, 0)
+  game.processZoom();
 })
 
 export const game = {
   selectTile: selectTile,
   unselectTile: unselectTile,
+  processZoom: processZoom,
   zoom: 1
 }
 
@@ -149,4 +139,22 @@ function unselectTile() {
   selectedTile = null;
 
   ui.panelBottom.show(false);
+}
+
+function processZoom() {
+  ctx.setTransform(game.zoom, 0, 0, game.zoom, 0, 0)
+
+  const newZoomPointX = canvas.width / (game.zoom * 2)
+  const newZoomPointY = canvas.height / (game.zoom * 2)
+
+  camera.x += -zoomPoint.x + newZoomPointX;
+  camera.y += -zoomPoint.y + newZoomPointY;
+
+  zoomPoint.x = newZoomPointX;
+  zoomPoint.y = newZoomPointY;
+
+  screen.w = canvas.width / game.zoom;
+  screen.h = canvas.height / game.zoom;
+
+  highlightedTile = tilemap.getTilePos(mouse, camera);
 }
