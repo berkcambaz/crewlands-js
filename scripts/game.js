@@ -112,7 +112,7 @@ canvas.addEventListener("wheel", (ev) => {
   mouse.y = ev.clientY - canvas.offsetTop;
 
   const dt = Math.sign(ev.wheelDelta) * 0.05;
-  game.zoom = util.clamp(game.zoom + dt, 0.5, 1.5);
+  game.zoom = util.clamp(game.zoom + dt, 0.5, 1.25);
 
   ctx.setTransform(game.zoom, 0, 0, game.zoom, 0, 0)
 
