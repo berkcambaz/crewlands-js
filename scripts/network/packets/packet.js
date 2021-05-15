@@ -1,7 +1,7 @@
 import { server } from "../server.js";
 import { client } from "../client.js";
 import { chat } from "../../ui/chat.js";
-import { util } from "../../util.js";
+import { COUNTRY, util } from "../../util.js";
 import { mapGenerator } from "../../map-generator.js";
 
 let packetId = 0;
@@ -122,7 +122,22 @@ function sendChooseColor(sending, receiveData, sendData) {
     sendData.id = packet.SEND_CHOOSE_COLOR;
     sendToServer(sendData);
   } else {
+    if (receiveData.color === COUNTRY.NONE) {
+      server.clients[receiveData.clientId].color = receiveData.color;
+    }
+    else {
+      let colorOccupied = false;
 
+      for (let i = 0; i < server.clients.length; ++i) {
+        if (server.clients[i].color === receiveData.color)
+          colorOccupied = true;
+      }
+
+      if (!colorOccupied)
+        server.clients[receiveData.clientId].color = receiveData.color;
+
+      console.log(server.clients);
+    }
   }
 }
 

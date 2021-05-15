@@ -102,7 +102,7 @@ function commandGenerateMap(width, height, countryCount) {
 }
 
 function commandColor(color) {
-  let countryId;
+  let countryId = null;
   switch (color) {
     case "green":
       countryId = COUNTRY.GREEN;
@@ -121,7 +121,8 @@ function commandColor(color) {
       break;
   }
 
-  packet.chooseColor(countryId);
+  if (countryId)
+    packet.sendChooseColor(true, null, { color: countryId });
 }
 
 function commandSave(name) {
