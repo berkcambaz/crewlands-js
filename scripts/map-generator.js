@@ -46,7 +46,10 @@ function generate(width, height, countryCount) {
         countryId: COUNTRY.NONE,
         occupiedByCountryId: COUNTRY.NONE,
         landmarkId: LANDMARK.NONE,
-        armyId: COUNTRY.NONE,
+        army: {
+          id: COUNTRY.NONE,
+          moved: false
+        },
         l1: null,
         l2: null,
         l3: null

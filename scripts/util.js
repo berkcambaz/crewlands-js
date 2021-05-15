@@ -23,7 +23,8 @@ export const LANDMARK = {
 export const util = {
   countryIdToSprite: countryIdToSprite,
   landmarkIdToSprite: landmarkIdToSprite,
-  countryIdToArmySprite: countryIdToArmySprite,
+  landmarkIdToGold: landmarkIdToGold,
+  idToArmySprite: idToArmySprite,
   countryIdToColor: countryIdToColor,
   getAllSaves: getAllSaves,
   save: save,
@@ -79,7 +80,7 @@ function landmarkIdToSprite(id) {
   }
 }
 
-function countryIdToArmySprite(id) {
+function idToArmySprite(id) {
   switch (id) {
     case COUNTRY.GREEN:
       return sprites[SPRITE.ARMY_GREEN];
@@ -106,6 +107,25 @@ function countryIdToColor(id) {
       return "#ffb600";
     default:
       return "#000000";
+  }
+}
+
+function landmarkIdToGold(landmarkId) {
+  switch (id) {
+    case LANDMARK.CAPITAL:
+      return 0;
+    case LANDMARK.CHURCH:
+      return 5;
+    case LANDMARK.FOREST:
+      return 0;
+    case LANDMARK.HOUSE:
+      return 3;
+    case LANDMARK.MOUNTAINS:
+      return 0;
+    case LANDMARK.TOWER:
+      return 4;
+    default:
+      return 0;
   }
 }
 
@@ -157,7 +177,7 @@ function getSave() {
       countryId: tilemap.tiles[i].countryId,
       occupiedByCountryId: tilemap.tiles[i].occupiedByCountryId,
       landmarkId: tilemap.tiles[i].landmarkId,
-      armyId: tilemap.tiles[i].armyId
+      army: tilemap.tiles[i].army
     })
   }
 
@@ -176,11 +196,11 @@ function setSave(save) {
       y: Math.floor(i / tilemap.height) * tilemap.tileHeight,
       l1: util.countryIdToSprite(save.tiles[i].countryId, save.tiles[i].occupiedByCountryId),
       l2: util.landmarkIdToSprite(save.tiles[i].landmarkId),
-      l3: util.countryIdToArmySprite(save.tiles[i].armyId),
+      l3: util.idToArmySprite(save.tiles[i].armyId),
       countryId: save.tiles[i].countryId,
       occupiedByCountryId: save.tiles[i].occupiedByCountryId,
       landmarkId: save.tiles[i].landmarkId,
-      armyId: save.tiles[i].armyId
+      army: save.tiles[i].army
     })
   }
 }

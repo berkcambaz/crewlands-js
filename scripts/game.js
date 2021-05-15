@@ -11,7 +11,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 loadSprites(() => {
-  util.load("mertmalaq")
+  //util.load("mertmalaq")
   ui.panelBottom.init()
   ui.chat.init()
 
@@ -39,14 +39,14 @@ function draw() {
   }
 }
 
-let time = 0;
-let dt = 0;
-let fps = 0;
+//let time = 0;
+//let dt = 0;
+//let fps = 0;
 function loop(timestamp) {
-  dt = (timestamp - time) / 1000;
-  time = timestamp;
-  fps = Math.round(1 / dt);
-  console.log(fps);
+  //dt = (timestamp - time) / 1000;
+  //time = timestamp;
+  //fps = Math.round(1 / dt);
+  //console.log(fps);
 
   draw();
 

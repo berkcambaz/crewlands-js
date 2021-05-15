@@ -29,6 +29,7 @@ function start() {
       const id = server.clients.push(socket) - 1;
       server.dataHandlers.push(new DataHandler("\n"));
       packet.playerConnected(true, id);
+      packet.syncPlayer(true, false, id);
 
       socket.on("data", (data) => {
         const clientId = server.clients.indexOf(socket);

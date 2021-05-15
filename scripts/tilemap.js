@@ -24,7 +24,7 @@ export const tilemap = {
  * @property {number} countryId
  * @property {number} occupiedByCountryId
  * @property {number} landmarkId
- * @property {number} armyId
+ * @property {Army} army
  */
 
 /**
@@ -33,6 +33,13 @@ export const tilemap = {
  * @property {number} income
  * @property {number} army
  * @property {number} armyLimit
+ */
+
+/**
+ * 
+ * @typedef Army
+ * @property {boolean} moved
+ * @property {number} id
  */
 
 /**
