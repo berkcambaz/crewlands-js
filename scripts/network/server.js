@@ -2,6 +2,7 @@ import { client } from "./client.js";
 import { chat } from "../ui/chat.js";
 import { packet } from "./packets/packet.js";
 import { DataHandler } from "./data-handler.js";
+import { COUNTRY } from "../util.js";
 const net = require("net");
 
 export const server = {
@@ -9,10 +10,8 @@ export const server = {
   stop: stop,
   /** @type {net.Server} */
   socket: null,
-  /** @type {net.Socket[]} */
-  clients: [],
-  /** @type {DataHandler[]} */
-  dataHandlers: []
+  /** @type {{socket: net.Socket, dataHandler: DataHandler, color: number}[]} */
+  clients: []
 }
 
 function start() {
@@ -26,16 +25,20 @@ function start() {
     })
 
     server.socket.on("connection", (socket) => {
-      const id = server.clients.push(socket) - 1;
-      server.dataHandlers.push(new DataHandler("\n"));
+      const id = server.clients.push({
+        socket: socket,
+        dataHandler: new DataHandler("\n"),
+        color: COUNTRY.NONE
+      }) - 1;
+
       packet.playerConnected(true, id);
       packet.syncPlayer(true, false, id);
 
       socket.on("data", (data) => {
-        const clientId = server.clients.indexOf(socket);
-        server.dataHandlers[clientId].push(data);
+        const clientId = getIdFromSocket(socket);
+        server.clients[clientId].dataHandler.push(data);
 
-        data = server.dataHandlers[clientId].getData()
+        data = server.clients[clientId].dataHandler.getData()
         if (data) {
           console.log(data);
           data.clientId = clientId;
@@ -44,9 +47,8 @@ function start() {
       })
 
       socket.on("close", () => {
-        const clientId = server.clients.indexOf(socket);
-        server.clients.splice(clientId, 1)[0].destroy();
-        server.dataHandlers.splice(clientId, 1);
+        const clientId = getIdFromSocket(socket);
+        server.clients.splice(clientId, 1)[0].socket.destroy();
         packet.playerDisconnected(true);
       })
     })
@@ -62,13 +64,25 @@ function stop() {
   if (server.socket && server.socket.listening) {
     chat.insertMessage(`Server has stopped.`, true);
 
-    server.clients.forEach((client) => { client.destroy() })
+    server.clients.forEach((client) => { client.socket.destroy() })
     server.socket.close((err) => {
       server.socket = null;
       server.clients = []
-      server.dataHandlers = []
       if (err)
         console.log(err);
     })
   }
+}
+
+/**
+ * 
+ * @param {net.Socket} socket 
+ */
+function getIdFromSocket(socket) {
+  for (let i = 0; i < server.clients.length; ++i) {
+    if (server.clients[i].socket === socket)
+      return i;
+  }
+
+  return -1;
 }

@@ -13,7 +13,8 @@ export const packet = {
   GENERATE_MAP: packetId++,
   SEND_MESSAGE: packetId++,
   BROADCAST_MESSAGE: packetId++,
-  CHOOSE_COUNTRY: packetId++,
+  SEND_CHOOSE_COLOR: packetId++,
+  BROADCAST_CHOOSE_COLOR: packetId++,
   handles: [
     playerConnected,
     playerDisconnected,
@@ -21,7 +22,8 @@ export const packet = {
     generateMap,
     sendMessage,
     broadcastMessage,
-    //chooseCountry,
+    sendChooseColor,
+    broadcastChooseColor
   ],
   playerConnected: playerConnected,
   playerDisconnected: playerDisconnected,
@@ -29,7 +31,8 @@ export const packet = {
   generateMap: generateMap,
   sendMessage: sendMessage,
   broadcastMessage: broadcastMessage,
-  //chooseCountry: chooseCountry
+  sendChooseColor: sendChooseColor,
+  broadcastChooseColor: broadcastChooseColor
 }
 
 /**
@@ -111,6 +114,23 @@ function broadcastMessage(sending, receiveData, sendData) {
     sendExcept(sendData, sendData.clientId)
   } else {
     chat.insertMessage(receiveData.message, false);
+  }
+}
+
+function sendChooseColor(sending, receiveData, sendData) {
+  if (sending) {
+    sendData.id = packet.SEND_CHOOSE_COLOR;
+    sendToServer(sendData);
+  } else {
+
+  }
+}
+
+function broadcastChooseColor(sending, receiveData, sendData, toId) {
+  if (sending) {
+
+  } else {
+
   }
 }
 

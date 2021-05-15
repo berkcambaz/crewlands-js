@@ -121,7 +121,7 @@ function commandColor(color) {
       break;
   }
 
-  packet.chooseCountry(countryId);
+  packet.chooseColor(countryId);
 }
 
 function commandSave(name) {
