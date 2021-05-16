@@ -121,7 +121,7 @@ function commandColor(color) {
       break;
   }
 
-  if (countryId)
+  if (countryId !== null)
     packet.sendChooseColor(true, null, { color: countryId });
 }
 

@@ -2,6 +2,7 @@ import { server } from "./server.js";
 import { chat } from "../ui/chat.js";
 import { packet } from "./packets/packet.js";
 import { DataHandler } from "./data-handler.js";
+import { COUNTRY } from "../util.js";
 const net = require("net");
 
 export const client = {
@@ -11,6 +12,7 @@ export const client = {
   socket: null,
   /** @type {DataHandler} */
   dataHandler: null,
+  color: COUNTRY.NONE,
   connected: false
 }
 

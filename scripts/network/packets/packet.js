@@ -3,6 +3,8 @@ import { client } from "../client.js";
 import { chat } from "../../ui/chat.js";
 import { COUNTRY, util } from "../../util.js";
 import { mapGenerator } from "../../map-generator.js";
+import { ui } from "../../ui/ui.js";
+import { tilemap } from "../../tilemap.js";
 
 let packetId = 0;
 
@@ -136,16 +138,21 @@ function sendChooseColor(sending, receiveData, sendData) {
       if (!colorOccupied)
         server.clients[receiveData.clientId].color = receiveData.color;
 
-      console.log(server.clients);
+      broadcastChooseColor(true, null, { color: receiveData.color }, receiveData.clientId)
     }
   }
 }
 
 function broadcastChooseColor(sending, receiveData, sendData, toId) {
   if (sending) {
-
+    sendData.id = packet.BROADCAST_CHOOSE_COLOR;
+    sendTo(sendData, toId);
   } else {
+    console.log(receiveData);
+    client.color = receiveData.color;
 
+    if (client.color !== COUNTRY.NONE)
+      ui.panelTop.update(client.color, tilemap.countries[client.color]);
   }
 }
 
